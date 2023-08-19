@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import Card from './Card';
 
 const renderer = new THREE.WebGLRenderer({
   antialias: true, // 표면이 덜 매끄러운 현상을 고쳐줌
@@ -11,7 +12,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene(); // 장면
-scene.background = new THREE.Color(0xffaa00); // 신에 배경을 넣어줄수 있음
+
 const camera = new THREE.PerspectiveCamera(
   75,
   window.innerWidth / window.innerHeight,
@@ -19,7 +20,14 @@ const camera = new THREE.PerspectiveCamera(
   500
 );
 
-camera.position.set(0, 0, 5);
+camera.position.set(0, 0, 25);
+const card = new Card({ width: 10, height: 15.8, color: '#0077ff' });
+
+scene.add(card.mesh);
+
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+ambientLight.position.set(-5, -5, -5);
+scene.add(ambientLight);
 
 reunder();
 
