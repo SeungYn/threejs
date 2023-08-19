@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import Card from './Card';
 
 const renderer = new THREE.WebGLRenderer({
@@ -21,6 +22,9 @@ const camera = new THREE.PerspectiveCamera(
 );
 
 camera.position.set(0, 0, 25);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+
 const card = new Card({ width: 10, height: 15.8, color: '#0077ff' });
 
 scene.add(card.mesh);
