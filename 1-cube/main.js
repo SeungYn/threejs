@@ -16,9 +16,10 @@ const camera = new THREE.PerspectiveCamera(
   500
 );
 
-const geometry = new THREE.BoxGeometry(2, 2, 2); // 도형
-const meterial = new THREE.MeshStandardMaterial({
-  color: 'blue',
+const cubeGeometry = new THREE.IcosahedronGeometry(1); // 도형
+const cubeBeterial = new THREE.MeshLambertMaterial({
+  color: 0x00ffff,
+  emissive: 0x111111,
   // transparent: true, // 투명 설정
   // opacity: 0.5, // 투명도 조절
   //visible: false,
@@ -26,21 +27,31 @@ const meterial = new THREE.MeshStandardMaterial({
   // side: THREE.DoubleSide, // 어디를 렌더링할찌, 육면체 외부, 내부, 양면
 }); // 재질
 
-const cube = new THREE.Mesh(geometry, meterial); // 도형과, 재질을 받아 오브젝트 생성
+const cube = new THREE.Mesh(cubeGeometry, cubeBeterial); // 도형과, 재질을 받아 오브젝트 생성
 
-scene.add(cube);
+const skeletonGeometry = new THREE.IcosahedronGeometry(2);
+const skeletonMaterial = new THREE.MeshBasicMaterial({
+  wireframe: true,
+  transparent: true,
+  opacity: 0.2,
+  color: 0xaaaaaa,
+});
 
-camera.position.set(3, 2, 5);
-camera.lookAt(cube.position); // 물체의 포지션을 넣어주면 잘 보이게 카메라 포지션을 잡음
+const skeleton = new THREE.Mesh(skeletonGeometry, skeletonMaterial);
 
-const directionalLight = new THREE.DirectionalLight(0xf0f0f0, 1); // 직사광선 조명 (색, 강도)
+scene.add(cube, skeleton);
+
+camera.position.set(0, 0, 5);
+// camera.lookAt(cube.position); // 물체의 포지션을 넣어주면 잘 보이게 카메라 포지션을 잡음
+
+const directionalLight = new THREE.DirectionalLight('white', 1); // 직사광선 조명 (색, 강도)
 directionalLight.position.set(-1, 2, 3);
 scene.add(directionalLight);
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.1); // 그림자 없이 은은하게 빛나게 해주는 조명
+// const ambientLight = new THREE.AmbientLight(0xffffff, 0.1); // 그림자 없이 은은하게 빛나게 해주는 조명
 
-ambientLight.position.set(3, 2, 1);
+// ambientLight.position.set(3, 2, 1);
 
-scene.add(ambientLight);
+// scene.add(ambientLight);
 
 const clock = new THREE.Clock();
 
@@ -50,7 +61,10 @@ function reunder() {
   //cube.rotation.x += THREE.MathUtils.degToRad(45);
   //cube.rotation.x = Date.now() / 1000; // 시간을 이용해서 어떤 프레임 환경에서 실행하든 같은 시간에 동일한 결과를 보게해줌
   cube.rotation.x = clock.getElapsedTime(); // 클락인스턴스가 생성된 시점 이후 초단위 경과 시간
-  //cube.rotation.y += 0.01;
+  cube.rotation.y = clock.getElapsedTime();
+
+  skeleton.rotation.x = clock.getElapsedTime() * 1.5;
+  skeleton.rotation.y = clock.getElapsedTime() * 1.5;
   // cube.position.y = Math.sin(cube.rotation.x); // 위아래로 움직이게 해줌
   // cube.scale.x = Math.acos(cube.rotation.x); // 큐브 사이즈 변경
 
