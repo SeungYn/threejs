@@ -41,7 +41,23 @@ const ambientLight = new THREE.AmbientLight(0xffffff, 0.1); // 그림자 없이 
 ambientLight.position.set(3, 2, 1);
 
 scene.add(ambientLight);
-renderer.render(scene, camera);
+
+const clock = new THREE.Clock();
+
+reunder();
+
+function reunder() {
+  //cube.rotation.x += THREE.MathUtils.degToRad(45);
+  //cube.rotation.x = Date.now() / 1000; // 시간을 이용해서 어떤 프레임 환경에서 실행하든 같은 시간에 동일한 결과를 보게해줌
+  cube.rotation.x = clock.getElapsedTime(); // 클락인스턴스가 생성된 시점 이후 초단위 경과 시간
+  //cube.rotation.y += 0.01;
+  // cube.position.y = Math.sin(cube.rotation.x); // 위아래로 움직이게 해줌
+  // cube.scale.x = Math.acos(cube.rotation.x); // 큐브 사이즈 변경
+
+  //cube.rotation.z += 0.01;
+  renderer.render(scene, camera);
+  requestAnimationFrame(reunder);
+}
 
 function handleResize() {
   camera.aspect = window.innerWidth / window.innerHeight; // 카메라 종횡비
