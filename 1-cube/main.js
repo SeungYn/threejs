@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import GUI from 'lil-gui';
 
 const renderer = new THREE.WebGLRenderer({
   antialias: true, // 표면이 덜 매끄러운 현상을 고쳐줌
@@ -101,3 +102,5 @@ function handleResize() {
 }
 
 window.addEventListener('resize', handleResize);
+const gui = new GUI();
+gui.add(cube.position, 'y');
