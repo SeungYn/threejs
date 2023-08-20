@@ -1,7 +1,9 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import Card from './Card';
+import { GUI } from 'lil-gui';
 
+const gui = new GUI();
 const renderer = new THREE.WebGLRenderer({
   antialias: true, // 표면이 덜 매끄러운 현상을 고쳐줌
   alpha: true, // 배경을 투명하게 해줌
@@ -29,9 +31,34 @@ const card = new Card({ width: 10, height: 15.8, color: '#0077ff' });
 
 scene.add(card.mesh);
 
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+const cardFolder = gui.addFolder('Card');
+
+cardFolder
+  .add(card.mesh.material, 'roughness')
+  .min(0)
+  .max(1)
+  .step(0.01)
+  .name('material.roughness');
+
+cardFolder
+  .add(card.mesh.material, 'metalness')
+  .min(0)
+  .max(1)
+  .step(0.01)
+  .name('material.metalness');
+
+const ambientLight = new THREE.AmbientLight('white', 1);
 ambientLight.position.set(-5, -5, -5);
 scene.add(ambientLight);
+
+// 직사 광선 추가
+
+const directionalLight1 = new THREE.DirectionalLight(0xffffff, 1);
+const directionalLight2 = directionalLight1.clone();
+
+directionalLight1.position.set(1, 1, 3);
+directionalLight2.position.set(-1, 1, -3);
+scene.add(directionalLight1);
 
 reunder();
 

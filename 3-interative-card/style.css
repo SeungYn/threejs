@@ -3,6 +3,13 @@ body {
   padding: 0;
 }
 
+.test {
+  background-color: #0077ff;
+  position: absolute;
+  width: 1000px;
+  height: 300px;
+}
+
 * {
   box-sizing: border-box;
 }
