@@ -27,12 +27,20 @@ camera.position.set(0, 0, 25);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 
+controls.autoRotate = true;
+controls.autoRotateSpeed = 2.5;
+controls.rotateSpeed = 2.5;
+controls.enableDamping = true;
+controls.enableZoom = false;
+
 const card = new Card({
   width: 10,
   height: 15.8,
   radius: 0.5,
   color: '#0077ff',
 });
+
+card.mesh.rotation.z = Math.PI * 0.1;
 
 scene.add(card.mesh);
 
@@ -62,12 +70,13 @@ const directionalLight1 = new THREE.DirectionalLight(0xffffff, 1);
 const directionalLight2 = directionalLight1.clone();
 
 directionalLight1.position.set(1, 1, 3);
-directionalLight2.position.set(-1, 1, -3);
+directionalLight2.position.set(-1, -1, -3);
 scene.add(directionalLight1);
 
 reunder();
 
 function reunder() {
+  controls.update(); // 컨트롤러는 update를 매 프레임마다 호출해야함
   renderer.render(scene, camera);
   requestAnimationFrame(reunder);
 }
