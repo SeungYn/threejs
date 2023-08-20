@@ -16,7 +16,12 @@ export default class Card {
       .lineTo(-x - radius, y)
       .absarc(-x, y, radius, Math.PI, Math.PI / 2, true);
 
-    const geometry = new THREE.ShapeGeometry(shape);
+    // 	가장자리 둥근각과 두께를 표현하기 위한 geometry
+    const geometry = new THREE.ExtrudeGeometry(shape, {
+      depth: 0.01,
+      bevelThickness: 0.1, // 모서리의 평평도를 나타냄
+    });
+
     const meterial = new THREE.MeshStandardMaterial({
       color,
       side: THREE.DoubleSide,
