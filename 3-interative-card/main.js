@@ -4,6 +4,10 @@ import Card from './Card';
 import { GUI } from 'lil-gui';
 
 const gui = new GUI();
+
+// 색상
+const COLORS = ['#ff6e6e', '#31c0c1', '#006fff', '#ffd732'];
+
 const renderer = new THREE.WebGLRenderer({
   antialias: true, // 표면이 덜 매끄러운 현상을 고쳐줌
   alpha: true, // 배경을 투명하게 해줌
@@ -37,7 +41,7 @@ const card = new Card({
   width: 10,
   height: 15.8,
   radius: 0.5,
-  color: '#0077ff',
+  color: COLORS[0],
 });
 
 card.mesh.rotation.z = Math.PI * 0.1;
@@ -60,18 +64,18 @@ cardFolder
   .step(0.01)
   .name('material.metalness');
 
-const ambientLight = new THREE.AmbientLight('white', 1);
+const ambientLight = new THREE.AmbientLight('white', 0.8);
 ambientLight.position.set(-5, -5, -5);
 scene.add(ambientLight);
 
 // 직사 광선 추가
 
-const directionalLight1 = new THREE.DirectionalLight(0xffffff, 1);
+const directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.6);
 const directionalLight2 = directionalLight1.clone();
 
 directionalLight1.position.set(1, 1, 3);
-directionalLight2.position.set(-1, -1, -3);
-scene.add(directionalLight1);
+directionalLight2.position.set(-1, 1, -3);
+scene.add(directionalLight1, directionalLight2);
 
 reunder();
 
@@ -89,3 +93,15 @@ function handleResize() {
 }
 
 window.addEventListener('resize', handleResize);
+
+const container = document.querySelector('.container');
+COLORS.forEach((color) => {
+  const button = document.createElement('button');
+
+  button.addEventListener('click', () => {
+    card.mesh.material.color = new THREE.Color(color); // 속성으로 변환시 THREE.Color 인스턴스로 색상을 변경시킬 수 있음
+  });
+
+  button.style.backgroundColor = color;
+  container.appendChild(button);
+});
