@@ -1,6 +1,8 @@
 import * as THREE from 'three';
+import { GUI } from 'lil-gui';
 
 window.addEventListener('load', () => {
+  const gui = new GUI();
   const renderer = new THREE.WebGLRenderer({
     antialias: true, // 표면이 덜 매끄러운 현상을 고쳐줌
     alpha: true,
@@ -11,6 +13,12 @@ window.addEventListener('load', () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 
   const scene = new THREE.Scene(); // 장면
+  //scene.fog = new THREE.FogExp2(0xf0f0f0, 0.001); // 안개를 카메라 기준으로 자연스럽게 해줌
+  scene.fog = new THREE.Fog(0xf0f0f0, 0.1, 500);
+
+  // gui.add(scene.fog, 'near').min(0).max(100).step(0.1);
+
+  // gui.add(scene.fog, 'far').min(100).max(500).step(0.1);
 
   const camera = new THREE.PerspectiveCamera(
     75,
@@ -34,6 +42,10 @@ window.addEventListener('load', () => {
   const pointLight = new THREE.PointLight('#ffffff', 5, 1000, 0.1);
   pointLight.position.set(15, 15, 15);
   scene.add(pointLight);
+
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+  directionalLight.position.set(-15, 15, 15);
+  scene.add(directionalLight);
 
   //console.log(waveGeometry.attributes.position); // 와이어 프레임의 각 점들의 좌표값이x,y,z, 순으로 반복되어 나타나 있음
 
