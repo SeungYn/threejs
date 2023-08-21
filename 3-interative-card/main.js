@@ -110,7 +110,7 @@ COLORS.forEach((color) => {
     card.mesh.material.color = new THREE.Color(color); // 속성으로 변환시 THREE.Color 인스턴스로 색상을 변경시킬 수 있음
     gsap.to(card.mesh.rotation, {
       y: card.mesh.rotation.y - Math.PI / 2,
-      duration: 1,
+      duration: 2.5,
       ease: 'back.out(4)',
     });
   });
