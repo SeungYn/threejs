@@ -10,6 +10,7 @@ window.addEventListener('load', async () => {
     canvas: document.querySelector('canvas'), // js파일에서 canvas를 추가하는 것이아니라 html파일안에 있는 canvas에 추가시킬 수 있음
   });
 
+  renderer.shadowMap.enabled = true;
   // renderer.setClearColor('#00ccff');
   renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -37,6 +38,7 @@ window.addEventListener('load', async () => {
   });
 
   const wave = new THREE.Mesh(waveGeometry, waveMaterial);
+  wave.receiveShadow = true;
   wave.rotation.x = -Math.PI / 2;
   scene.add(wave);
 
@@ -46,6 +48,12 @@ window.addEventListener('load', async () => {
 
   const whale = gltf.scene;
 
+  whale.castShadow = true;
+  whale.traverse((object) => {
+    if (object.isMesh) {
+      object.castShadow = true;
+    }
+  });
   whale.update = function () {
     const elapsedTime = clock.getElapsedTime();
 
@@ -56,12 +64,25 @@ window.addEventListener('load', async () => {
 
   scene.add(whale);
 
-  const pointLight = new THREE.PointLight('#ffffff', 5, 1000, 0.1);
-  pointLight.position.set(15, 15, 15);
+  const pointLight = new THREE.PointLight('#ffffff', 4, 1000, 0.1);
+
+  // 그림자 추가하기
+  pointLight.castShadow = true;
+  pointLight.shadow.mapSize.width = 1000;
+  pointLight.shadow.mapSize.height = 1000;
+  pointLight.shadow.radius = 1;
+
+  pointLight.position.set(40, 40, 40);
   scene.add(pointLight);
 
   const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-  directionalLight.position.set(-15, 15, 15);
+
+  directionalLight.castShadow = true;
+  directionalLight.shadow.mapSize.width = 1024;
+  directionalLight.shadow.mapSize.height = 1024;
+  directionalLight.shadow.radius = 10;
+
+  directionalLight.position.set(40, 40, 40);
   scene.add(directionalLight);
 
   //console.log(waveGeometry.attributes.position); // 와이어 프레임의 각 점들의 좌표값이x,y,z, 순으로 반복되어 나타나 있음
