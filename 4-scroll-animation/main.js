@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import { GUI } from 'lil-gui';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
-window.addEventListener('load', () => {
+window.addEventListener('load', async () => {
   const gui = new GUI();
   const renderer = new THREE.WebGLRenderer({
     antialias: true, // 표면이 덜 매끄러운 현상을 고쳐줌
@@ -38,6 +39,22 @@ window.addEventListener('load', () => {
   const wave = new THREE.Mesh(waveGeometry, waveMaterial);
   wave.rotation.x = -Math.PI / 2;
   scene.add(wave);
+
+  const gltfLoader = new GLTFLoader();
+
+  const gltf = await gltfLoader.loadAsync('./model/whale/scene.gltf');
+
+  const whale = gltf.scene;
+
+  whale.update = function () {
+    const elapsedTime = clock.getElapsedTime();
+
+    whale.position.y = 20 + Math.sin(elapsedTime * 3);
+  };
+
+  whale.scale.set(40, 40, 40);
+
+  scene.add(whale);
 
   const pointLight = new THREE.PointLight('#ffffff', 5, 1000, 0.1);
   pointLight.position.set(15, 15, 15);
@@ -89,7 +106,11 @@ window.addEventListener('load', () => {
 
   function reunder() {
     wave.update();
+    whale.update();
     renderer.render(scene, camera);
+
+    camera.lookAt(whale.position);
+
     requestAnimationFrame(reunder);
   }
 
