@@ -65,9 +65,26 @@ window.addEventListener('load', () => {
       (Math.random() - 0.5) * waveHeight;
     waveGeometry.attributes.position.setZ(i, z);
   }
+
+  //파도를 올라가게 하는 함수
+  wave.update = () => {
+    const elapsedTime = clock.getElapsedTime();
+
+    for (let i = 0; i < waveGeometry.attributes.position.array.length; i += 3) {
+      waveGeometry.attributes.position.array[i + 2] += elapsedTime * 0.01;
+    }
+
+    //변경이 바로 적용되도록 하는 속성
+    waveGeometry.attributes.position.needsUpdate = true;
+  };
+
+  // 사용자별 동일한 화면을 보여주기 위한 clock
+  const clock = new THREE.Clock();
+
   reunder();
 
   function reunder() {
+    wave.update();
     renderer.render(scene, camera);
     requestAnimationFrame(reunder);
   }
