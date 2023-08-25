@@ -50,6 +50,7 @@ window.addEventListener('load', () => {
   //console.log(waveGeometry.attributes.position); // 와이어 프레임의 각 점들의 좌표값이x,y,z, 순으로 반복되어 나타나 있음
 
   const waveHeight = 2.5;
+  const initialZPositions = [];
   // z 값을 다르게 해주는 1 번째 방법
   // for (let i = 0; i < waveGeometry.attributes.position.array.length; i += 3) {
   //   // z값을 다르게 함으로써 다른 파도를 만드는 작업
@@ -63,6 +64,7 @@ window.addEventListener('load', () => {
     const z =
       waveGeometry.attributes.position.getZ(i) +
       (Math.random() - 0.5) * waveHeight;
+    initialZPositions.push(z);
     waveGeometry.attributes.position.setZ(i, z);
   }
 
@@ -70,8 +72,10 @@ window.addEventListener('load', () => {
   wave.update = () => {
     const elapsedTime = clock.getElapsedTime();
 
-    for (let i = 0; i < waveGeometry.attributes.position.array.length; i += 3) {
-      waveGeometry.attributes.position.array[i + 2] += elapsedTime * 0.01;
+    for (let i = 0; i < waveGeometry.attributes.position.count; i++) {
+      const z =
+        initialZPositions[i] + Math.sin(elapsedTime * 3 + i ** 2) * waveHeight;
+      waveGeometry.attributes.position.setZ(i, z);
     }
 
     //변경이 바로 적용되도록 하는 속성
