@@ -10,9 +10,12 @@ window.addEventListener('load', async () => {
 
   const params = {
     waveColor: '#00ffff',
+    backgroundColor: '#ffffff',
+    fogColor: '#f0f0f0',
   };
 
   const gui = new GUI();
+  gui.hide();
   const renderer = new THREE.WebGLRenderer({
     antialias: true, // 표면이 덜 매끄러운 현상을 고쳐줌
     alpha: true,
@@ -153,10 +156,69 @@ window.addEventListener('load', async () => {
 
   window.addEventListener('resize', handleResize);
 
-  gsap.to(params, {
-    waveColor: '#4268ff',
-    onUpdate: () => {
-      waveMaterial.color = new THREE.Color(params.waveColor);
+  // gsap.to(params, {
+  //   waveColor: '#4268ff',
+  //   onUpdate: () => {
+  //     // 지정된 속성이 변환면 콜백을 호출
+  //     waveMaterial.color = new THREE.Color(params.waveColor);
+  //   },
+  //   scrollTrigger: {
+  //     // 스크롤 영역 지정
+  //     trigger: '.wrapper',
+  //     start: 'top top', // 타켓의 시작 위치, 기준의 시작위치
+  //     markers: true,
+  //     scrub: true, // 스크롤 영역에 따라 천천히 변함
+  //   },
+  // });
+
+  // gsap.to(params, {
+  //   backgroundColor: '#2a2a2a',
+  //   onUpdate: () => {
+  //     // 지정된 속성이 변환면 콜백을 호출
+  //     scene.background = new THREE.Color(params.backgroundColor);
+  //   },
+  //   scrollTrigger: {
+  //     // 스크롤 영역 지정
+  //     trigger: '.wrapper',
+  //     start: 'top top', // 타켓의 시작 위치, 기준의 시작위치
+  //     markers: true,
+  //     scrub: true, // 스크롤 영역에 따라 천천히 변함
+  //   },
+  // });
+
+  // gsap 타임 라인을 통해 애니메이션을 동시에 적용시키거나 따로 적용 시킬수 있음
+  const t1 = gsap.timeline({
+    scrollTrigger: {
+      // 스크롤 영역 지정
+      trigger: '.wrapper',
+      start: 'top top', // 타켓의 시작 위치, 기준의 시작위치
+      markers: true,
+      scrub: true, // 스크롤 영역에 따라 천천히 변함
     },
   });
+
+  t1.to(params, {
+    waveColor: '#4268ff',
+    onUpdate: () => {
+      // 지정된 속성이 변환면 콜백을 호출
+      waveMaterial.color = new THREE.Color(params.waveColor);
+    },
+  })
+    .to(params, {
+      backgroundColor: '#2a2a2a',
+      onUpdate: () => {
+        // 지정된 속성이 변환면 콜백을 호출
+        scene.background = new THREE.Color(params.backgroundColor);
+      },
+    })
+    .to(
+      params,
+      {
+        fogColor: '#2f2f2f',
+        onUpdate: () => {
+          scene.fog.color = new THREE.Color(params.fogColor);
+        },
+      },
+      '<' // 3번째 파라미터로 애니메이션 시작시간 설정
+    );
 });
