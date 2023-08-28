@@ -26,6 +26,7 @@ export default class Firework {
       alphaMap: texture,
       transparent: true,
       depthWrite: false,
+      color: new THREE.Color(Math.random(), Math.random(), Math.random()), // Color은 인자로 빨, 초, 파 를 받음
     });
 
     const points = new THREE.Points(particlesGeometry, particleMaterial);
