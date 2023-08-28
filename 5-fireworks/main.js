@@ -26,9 +26,9 @@ const count = 1000; // 정점 정보
 const positions = new Float32Array(count * 3);
 
 for (let i = 0; i < count; i++) {
-  positions[i * 3] = THREE.MathUtils.randFloatSpread(1); // threejs Random 유틸함수 인자의 반으로 나눈 값을 범위로 랜덤 값을 줌
-  positions[i * 3 + 1] = THREE.MathUtils.randFloatSpread(1);
-  positions[i * 3 + 2] = THREE.MathUtils.randFloatSpread(1);
+  positions[i * 3] = THREE.MathUtils.randFloatSpread(10); // threejs Random 유틸함수 인자의 반으로 나눈 값을 범위로 랜덤 값을 줌
+  positions[i * 3 + 1] = THREE.MathUtils.randFloatSpread(10);
+  positions[i * 3 + 2] = THREE.MathUtils.randFloatSpread(10);
 }
 
 geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3)); // position속성에 positions의 각 점을 넣어주는데 BufferAttribute를 이용하면 3값이 하나의 점이라는 것을 명시해야함
@@ -36,9 +36,16 @@ geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3)); // p
 const material = new THREE.PointsMaterial({
   // 기존 material으로는 점의 크기를 조절할수 없을 PointsMaterial를 이용해야함
   color: 0xccaaff,
-  size: 0.01,
-  sizeAttenuation: false, // 원근에 따른 점의 크기를 무시해줌
+  size: 1,
+  //sizeAttenuation: false, // 원근에 따른 점의 크기를 무시해줌
 });
+
+const textureLoader = new THREE.TextureLoader();
+const texture = textureLoader.load('./public/particle.png');
+
+material.alphaMap = texture; // 배경이 있는경우 alphaMap을 사용
+material.transparent = true; // 배경을 투명하게 해주기
+material.depthWrite = false; // 같은 위치에 표현하기 위한 것
 
 new OrbitControls(camera, renderer.domElement);
 const points = new THREE.Points(geometry, material);
