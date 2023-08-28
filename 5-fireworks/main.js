@@ -15,10 +15,10 @@ const camera = new THREE.PerspectiveCamera(
   75,
   window.innerWidth / window.innerHeight,
   1,
-  500
+  100000
 );
 
-camera.position.set(0, 0, 5);
+camera.position.set(0, 0, 8000);
 
 const firework = new Firework({ x: 0, y: 0 });
 
@@ -29,6 +29,7 @@ new OrbitControls(camera, renderer.domElement);
 reunder();
 
 function reunder() {
+  firework.update();
   renderer.render(scene, camera);
   requestAnimationFrame(reunder);
 }
