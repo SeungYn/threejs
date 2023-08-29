@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 export default class Firework {
   constructor({ x, y }) {
-    const count = 1000;
+    const count = 1000 + parseInt(Math.random() * 5000);
     const velocity = 10 + Math.random() * 10;
 
     const particlesGeometry = new THREE.BufferGeometry();
@@ -13,9 +13,25 @@ export default class Firework {
       const particle = new THREE.Vector3(x, y, 0);
 
       // 정점을 생성할 때 각 정점을 다른 속도로 퍼트리기 위한 값을 저장
-      particle.deltaX = THREE.MathUtils.randFloatSpread(velocity);
-      particle.deltaY = THREE.MathUtils.randFloatSpread(velocity);
-      particle.deltaZ = THREE.MathUtils.randFloatSpread(velocity);
+      // particle.deltaX = THREE.MathUtils.randFloatSpread(velocity);
+      // particle.deltaY = THREE.MathUtils.randFloatSpread(velocity);
+      // particle.deltaZ = THREE.MathUtils.randFloatSpread(velocity);
+
+      particle.theta = Math.random() * Math.PI * 2;
+      particle.phi = Math.random() * Math.PI * 2;
+
+      // 반지름이 1인 원에서 cos와 sin은 각 x,y 좌표임
+      // 2차원 원으로 파티클 표현하기
+      // particle.deltaX = velocity * Math.cos(particle.theta);
+      // particle.deltaY = velocity * Math.sin(particle.theta);
+      // particle.deltaZ = 0;
+
+      // 구면좌표계에 따른 각 점을 구하는 공식
+      particle.deltaX =
+        velocity * Math.sin(particle.theta) * Math.cos(particle.phi);
+      particle.deltaY =
+        velocity * Math.sin(particle.theta) * Math.sin(particle.phi);
+      particle.deltaZ = velocity * Math.cos(particle.theta);
 
       this.particles.push(particle);
     }
@@ -33,6 +49,7 @@ export default class Firework {
       transparent: true,
       depthWrite: false,
       color: new THREE.Color(Math.random(), Math.random(), Math.random()), // Color은 인자로 빨, 초, 파 를 받음
+      blending: THREE.AdditiveBlending, // 채도를 살아나게 해줌
     });
 
     const points = new THREE.Points(particlesGeometry, particleMaterial);
