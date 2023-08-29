@@ -57,6 +57,7 @@ export default class Firework {
   }
 
   update() {
+    console.log('update');
     const position = this.points.geometry.attributes.position;
     for (let i = 0; i < this.particles.length; i++) {
       const x = position.getX(i);

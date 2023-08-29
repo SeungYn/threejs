@@ -19,17 +19,25 @@ const camera = new THREE.PerspectiveCamera(
 );
 
 camera.position.set(0, 0, 8000);
+const fireworks = [];
 
+fireworks.update = function () {
+  for (let i = 0; i < this.length; i++) {
+    const firework = fireworks[i];
+    firework.update();
+  }
+};
 const firework = new Firework({ x: 0, y: 0 });
 
 scene.add(firework.points);
 
 new OrbitControls(camera, renderer.domElement);
 
+fireworks.push(firework);
 reunder();
 
 function reunder() {
-  firework.update();
+  fireworks.update();
   renderer.render(scene, camera);
   requestAnimationFrame(reunder);
 }
@@ -42,6 +50,18 @@ function handleResize() {
 }
 
 window.addEventListener('resize', handleResize);
+
+function handleMouseDown() {
+  const fire = new Firework({
+    x: THREE.MathUtils.randFloatSpread(8000),
+    y: THREE.MathUtils.randFloatSpread(8000),
+  });
+  scene.add(fire.points);
+
+  fireworks.push(fire);
+}
+
+window.addEventListener('mousedown', handleMouseDown);
 
 // 이미지를 활용한 별 만드는 법
 // const geometry = new THREE.BufferGeometry();
